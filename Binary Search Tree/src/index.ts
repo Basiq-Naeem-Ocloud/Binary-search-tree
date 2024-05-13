@@ -315,3 +315,80 @@ private rotateLeft(node: BSTNode): BSTNode {
 }
 }
 
+
+
+// test cases :
+
+
+
+
+const tree = new Tree();
+tree.insert(5);
+tree.insert(3);
+tree.insert(7);
+tree.insert(2);
+tree.insert(4);
+tree.insert(6);
+tree.insert(8);
+
+
+
+console.log("Height of the tree:", tree.treeHeight(tree.root));
+
+
+const singleValue = 5;
+const arrayValues = [5, 3, 7, 2, 4, 6, 8];
+
+const treeFromSingleValue = new Tree(singleValue);
+console.log("Height of the tree (from single value):", treeFromSingleValue.treeHeight(treeFromSingleValue.root)); // Output: 1
+
+
+//from array
+const treeFromArray = new Tree(arrayValues);
+console.log(treeFromArray.findMinimumValue(treeFromArray.root));
+console.log(treeFromArray.findMaximumValue(treeFromArray.root));
+
+
+
+treeFromArray.preOrder(treeFromArray.root);
+console.log("--------------");
+
+treeFromArray.inOrder(treeFromArray.root);
+console.log("--------------");
+treeFromArray.postOrder(treeFromArray.root);
+console.log("Height of the tree (from array):", treeFromArray.treeHeight(treeFromArray.root)); // Output: 3
+
+
+
+
+// delete fucntion 
+
+const tree1 = new Tree([5, 4, 8, 2, 1, 6, 7]);
+
+
+console.log("Original tree:");
+tree1.inOrder(tree1.root)
+
+
+
+// // // Test case 1: Deleting a leaf node (e.g., node with key 2)
+// // tree1.deleteNode(1);
+
+// // // Test case 2: Deleting a node with one child (e.g., node with key 4)
+// // tree1.deleteNode(4);
+
+// // // Test case 3: Deleting a node with two children (e.g., node with key 7)
+// // tree1.deleteNode(7);
+
+// // // Test case 4: Deleting the root node (e.g., node with key 5)
+// // tree1.deleteNode(5);
+
+// // Test case 5: Deleting a node not present in the tree (e.g., node with key 10)
+// // tree1.deleteNode(10);
+
+// // console.log("Tree after deletions: \n -----------");
+
+
+ 
+
+tree1.inOrder(tree.root);
