@@ -23,23 +23,30 @@ class Tree
         } else {
             this.insert(data);
         }
+        this.balanceTree();
     }
     
     insert(data:number): void
     {
-        const newNode = new BSTNode(data) 
+        // Convert float value to integer
+        const intValue = Math.floor(data);
+        const newNode = new BSTNode(intValue)
         if(this.root === null)
         {
             this.root = newNode;
         }
         else
         {
-            let curNode = this.root 
-            
+            let curNode = this.root
+
 
             while (curNode)
             {
-              if(data < curNode.data)
+                if (intValue === curNode.data) {
+                    console.log(`Value ${intValue} already exists in the tree. Skipping insertion.`);
+                    return;
+                }
+              if(intValue < curNode.data)
               {
                 if(!curNode.left)
                 {
@@ -78,7 +85,12 @@ class Tree
         }
     }
 
-    preOrder(node: BSTNode | null) 
+    printPreOrder()
+    {
+        this.preOrder(this.root);
+    }
+
+    private preOrder(node: BSTNode | null)
     {  //preorder traversal
         if (node !== null) 
         {
@@ -87,7 +99,11 @@ class Tree
             this.preOrder(node.right); 
         }
     }
-    inOrder(node: BSTNode | null) 
+    printinOrder()
+    {
+        this.inOrder(this.root);
+    }
+    private inOrder(node: BSTNode | null)
     {  //inorder traversal
         if (node !== null) 
         {
@@ -96,7 +112,11 @@ class Tree
             this.inOrder(node.right); 
         }
     }
-    postOrder(node: BSTNode | null) 
+    printPostOrder()
+    {
+        this.postOrder(this.root);
+    }
+    private postOrder(node: BSTNode | null)
     {  //postorder traversal
         if (node !== null) 
         {
@@ -213,8 +233,38 @@ class Tree
 
 // // Function to update a node's value in the tree while maintaining the binary search tree property
 update(oldValue: number, newValue: number): void {
-    this.root = this.updateNode(this.root, oldValue, newValue);
+    // Convert float values to integers
+    const oldIntValue = Math.floor(oldValue);
+    const newIntValue = Math.floor(newValue);
+
+    // Check if old value is equal to new value
+    if (oldIntValue === newIntValue) {
+        console.log(`Old value ${oldIntValue} is equal to new value ${newIntValue}. Skipping update.`);
+        return;
+    }
+
+    
+    this.root = this.updateNode(this.root, oldIntValue, newIntValue);
+
+    if (this.root) {
+        const nodes: number[] = [];
+        this.preOrderTraversal(this.root, nodes);
+
+        // Create a new tree with the updated nodes array
+        const newTree = new Tree(nodes);
+        this.root = newTree.root;
+
+        this.balanceTree(); //balancing tree
+    }
+        
 }
+    private preOrderTraversal(node: BSTNode | null, nodes: number[]): void {
+        if (node) {
+            nodes.push(node.data);
+            this.preOrderTraversal(node.left, nodes);
+            this.preOrderTraversal(node.right, nodes);
+        }
+    }
 
 private updateNode(node: BSTNode | null, oldValue: number, newValue: number): BSTNode | null {
     if (!node) {
@@ -237,7 +287,7 @@ private updateNode(node: BSTNode | null, oldValue: number, newValue: number): BS
         if(oldValue!==newValue)
         {
             node.data = newValue; 
-            this.balanceTree();
+            
         }
              
     }
@@ -349,13 +399,13 @@ console.log(treeFromArray.findMaximumValue(treeFromArray.root));
 
 
 
-treeFromArray.preOrder(treeFromArray.root);
-console.log("--------------");
+// treeFromArray.preOrder(treeFromArray.root);
+// console.log("--------------");
 
-treeFromArray.inOrder(treeFromArray.root);
-console.log("--------------");
-treeFromArray.postOrder(treeFromArray.root);
-console.log("Height of the tree (from array):", treeFromArray.treeHeight(treeFromArray.root)); // Output: 3
+// treeFromArray.inOrder(treeFromArray.root);
+// console.log("--------------");
+// treeFromArray.postOrder(treeFromArray.root);
+// console.log("Height of the tree (from array):", treeFromArray.treeHeight(treeFromArray.root)); // Output: 3
 
 
 
@@ -365,8 +415,8 @@ console.log("Height of the tree (from array):", treeFromArray.treeHeight(treeFro
 const tree1 = new Tree([5, 4, 8, 2, 1, 6, 7]);
 
 
-console.log("Original tree:");
-tree1.inOrder(tree1.root)
+// console.log("Original tree:");
+// tree1.inOrder(tree1.root)
 
 
 
@@ -390,4 +440,4 @@ tree1.inOrder(tree1.root)
 
  
 
-tree1.inOrder(tree.root);
+// tree1.inOrder(tree.root);
