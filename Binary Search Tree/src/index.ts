@@ -23,30 +23,23 @@ class Tree
         } else {
             this.insert(data);
         }
-        this.balanceTree();
     }
-    
+
     insert(data:number): void
     {
-        // Convert float value to integer
-        const intValue = Math.floor(data);
-        const newNode = new BSTNode(intValue)
+        const newNode = new BSTNode(data) 
         if(this.root === null)
         {
             this.root = newNode;
         }
         else
         {
-            let curNode = this.root
+            let curNode = this.root 
 
 
             while (curNode)
             {
-                if (intValue === curNode.data) {
-                    console.log(`Value ${intValue} already exists in the tree. Skipping insertion.`);
-                    return;
-                }
-              if(intValue < curNode.data)
+              if(data < curNode.data)
               {
                 if(!curNode.left)
                 {
@@ -66,8 +59,8 @@ class Tree
               }
             }
         }
-        
-        
+
+
     }
 
     //contins function check the existance of a node's value in tree
@@ -85,12 +78,7 @@ class Tree
         }
     }
 
-    printPreOrder()
-    {
-        this.preOrder(this.root);
-    }
-
-    private preOrder(node: BSTNode | null)
+    preOrder(node: BSTNode | null) 
     {  //preorder traversal
         if (node !== null) 
         {
@@ -99,11 +87,7 @@ class Tree
             this.preOrder(node.right); 
         }
     }
-    printinOrder()
-    {
-        this.inOrder(this.root);
-    }
-    private inOrder(node: BSTNode | null)
+    inOrder(node: BSTNode | null) 
     {  //inorder traversal
         if (node !== null) 
         {
@@ -112,15 +96,11 @@ class Tree
             this.inOrder(node.right); 
         }
     }
-    printPostOrder()
-    {
-        this.postOrder(this.root);
-    }
-    private postOrder(node: BSTNode | null)
+    postOrder(node: BSTNode | null) 
     {  //postorder traversal
         if (node !== null) 
         {
-        
+
             this.preOrder(node.left); 
             this.preOrder(node.right); 
             console.log(node.data); 
@@ -157,7 +137,7 @@ class Tree
         {
             return 0
         }
-        
+
         let left = this.treeHeight(node.left)
         let right = this.treeHeight(node.right)
 
@@ -188,7 +168,7 @@ class Tree
                 curr = curr.right;
             }
         }
-        
+
 
         if (curr === null) {
             return root; // Key not found
@@ -233,38 +213,8 @@ class Tree
 
 // // Function to update a node's value in the tree while maintaining the binary search tree property
 update(oldValue: number, newValue: number): void {
-    // Convert float values to integers
-    const oldIntValue = Math.floor(oldValue);
-    const newIntValue = Math.floor(newValue);
-
-    // Check if old value is equal to new value
-    if (oldIntValue === newIntValue) {
-        console.log(`Old value ${oldIntValue} is equal to new value ${newIntValue}. Skipping update.`);
-        return;
-    }
-
-    
-    this.root = this.updateNode(this.root, oldIntValue, newIntValue);
-
-    if (this.root) {
-        const nodes: number[] = [];
-        this.preOrderTraversal(this.root, nodes);
-
-        // Create a new tree with the updated nodes array
-        const newTree = new Tree(nodes);
-        this.root = newTree.root;
-
-        this.balanceTree(); //balancing tree
-    }
-        
+    this.root = this.updateNode(this.root, oldValue, newValue);
 }
-    private preOrderTraversal(node: BSTNode | null, nodes: number[]): void {
-        if (node) {
-            nodes.push(node.data);
-            this.preOrderTraversal(node.left, nodes);
-            this.preOrderTraversal(node.right, nodes);
-        }
-    }
 
 private updateNode(node: BSTNode | null, oldValue: number, newValue: number): BSTNode | null {
     if (!node) {
@@ -287,9 +237,9 @@ private updateNode(node: BSTNode | null, oldValue: number, newValue: number): BS
         if(oldValue!==newValue)
         {
             node.data = newValue; 
-            
+            this.balanceTree();
         }
-             
+
     }
 
     return node;
@@ -303,7 +253,7 @@ private updateNode(node: BSTNode | null, oldValue: number, newValue: number): BS
 }
 
 private balanceTreeRecursive(node: BSTNode | null): BSTNode | null {
-    
+
     if (!node) {
         return null;
     }
