@@ -1,20 +1,19 @@
 class BSTNode {  //node class
     data: number;
     left: BSTNode | null;
-    right: BSTNode | null ;
+    right: BSTNode | null;
 
-    constructor(data: number )
-    {
-        this.data=data;
+    constructor(data: number) {
+        this.data = data;
         this.left = null;
         this.right = null;
     }
-  }
-class Tree
-{
+}
+
+class Tree {
     root: BSTNode | null
 
-    constructor(data: number | number[] = []) { 
+    constructor(data: number | number[] = []) {
         this.root = null;
         if (Array.isArray(data)) {
             for (const value of data) {
@@ -23,54 +22,51 @@ class Tree
         } else {
             this.insert(data);
         }
+        this.balanceTree();
     }
 
-    insert(data:number): void
-    {
-        const newNode = new BSTNode(data) 
-        if(this.root === null)
-        {
+    insert(data: number): void {
+        // Convert float value to integer
+        const intValue = Math.floor(data);
+        const newNode = new BSTNode(intValue)
+        if (this.root === null) {
             this.root = newNode;
-        }
-        else
-        {
-            let curNode = this.root 
+        } else {
+            let curNode = this.root
 
 
-            while (curNode)
-            {
-              if(data < curNode.data)
-              {
-                if(!curNode.left)
-                {
-                    curNode.left=newNode;
-                    break
+            while (curNode) {
+                if (intValue === curNode.data) {
+                    console.log(`Value ${intValue} already exists in the tree. Skipping insertion.`);
+                    return;
                 }
-                curNode =curNode.left;
-              }
-              else
-              {
-                if(!curNode.right)
-                {
-                    curNode.right=newNode;
-                    break
+                if (intValue < curNode.data) {
+                    if (!curNode.left) {
+                        curNode.left = newNode;
+                        break
+                    }
+                    curNode = curNode.left;
+                } else {
+                    if (!curNode.right) {
+                        curNode.right = newNode;
+                        break
+                    }
+                    curNode = curNode.right;
                 }
-                curNode = curNode.right;
-              }
             }
         }
 
 
     }
 
-    //contins function check the existance of a node's value in tree
+    //contains function check the existance of a node's value in tree
     contains(node: BSTNode | null, key: number): boolean {
         if (!node) {
             return false; // If node is null key doesn't exist
         }
 
         if (node.data === key) {
-            return true; 
+            return true;
         } else if (node.data < key) {
             return this.contains(node.right, key); // Search in the right subtree
         } else {
@@ -78,33 +74,37 @@ class Tree
         }
     }
 
-    preOrder(node: BSTNode | null) 
-    {  //preorder traversal
-        if (node !== null) 
-        {
-            console.log(node.data); 
-            this.preOrder(node.left); 
-            this.preOrder(node.right); 
-        }
-    }
-    inOrder(node: BSTNode | null) 
-    {  //inorder traversal
-        if (node !== null) 
-        {
-            this.inOrder(node.left); 
-            console.log(node.data); 
-            this.inOrder(node.right); 
-        }
-    }
-    postOrder(node: BSTNode | null) 
-    {  //postorder traversal
-        if (node !== null) 
-        {
 
-            this.preOrder(node.left); 
-            this.preOrder(node.right); 
-            console.log(node.data); 
-        }
+    preOrder(node: BSTNode | null = this.root ) {  //preorder traversal
+        if (node === null)
+            return;
+
+        console.log(node.data);
+        this.preOrder(node.left);
+        this.preOrder(node.right);
+
+    }
+
+
+    inOrder(node: BSTNode | null = this.root ) {  //inorder traversal
+        if (node === null)
+            return;
+
+        this.inOrder(node.left);
+        console.log(node.data);
+        this.inOrder(node.right);
+
+    }
+
+
+    postOrder(node: BSTNode | null = this.root ) {  //postorder traversal
+        if (node === null)
+            return;
+
+        this.preOrder(node.left);
+        this.preOrder(node.right);
+        console.log(node.data);
+
     }
 
     //function to find minimum node's value
@@ -131,10 +131,9 @@ class Tree
         return current.data;
     }
 
-    treeHeight(node: BSTNode | null ): number  //function to find tree height
+    treeHeight(node: BSTNode | null = this.root): number  //function to find tree height
     {
-        if(node == null)
-        {
+        if (node == null) {
             return 0
         }
 
@@ -145,7 +144,7 @@ class Tree
     }
 
 
-    deleteNode(key: number): void {  
+    deleteNode(key: number): void {
         this.root = this.deleteBSTNode(this.root, key);
         this.balanceTree();
 
@@ -162,7 +161,7 @@ class Tree
 
         while (curr !== null && curr.data !== key) {
             prev = curr;
-            if (key < curr.data ) { 
+            if (key < curr.data) {
                 curr = curr.left;
             } else {
                 curr = curr.right;
@@ -210,109 +209,126 @@ class Tree
     }
 
 
-
 // // Function to update a node's value in the tree while maintaining the binary search tree property
-update(oldValue: number, newValue: number): void {
-    this.root = this.updateNode(this.root, oldValue, newValue);
-}
+    update(oldValue: number, newValue: number): void {
+        // Convert float values to integers
+        const oldIntValue = Math.floor(oldValue);
+        const newIntValue = Math.floor(newValue);
 
-private updateNode(node: BSTNode | null, oldValue: number, newValue: number): BSTNode | null {
-    if (!node) {
-        return null; // Node with old value not found
-    }
-
-    if (oldValue < node.data) {
-        node.left = this.updateNode(node.left, oldValue, newValue);
-    } 
-
-    else if (oldValue > node.data) 
-    {
-        node.right = this.updateNode(node.right, oldValue, newValue);
-    } 
-
-    else 
-    {
-        // If newValue is equal to oldValue no change needed
-        // Node with old value found update its value with the new value
-        if(oldValue!==newValue)
-        {
-            node.data = newValue; 
-            this.balanceTree();
+        // Check if old value is equal to new value
+        if (oldIntValue === newIntValue) {
+            console.log(`Old value ${oldIntValue} is equal to new value ${newIntValue}. Skipping update.`);
+            return;
         }
 
+        // Proceed with updating the value
+        this.root = this.updateNode(this.root, oldIntValue, newIntValue);
+        if (this.root) {
+            const nodes: number[] = [];
+            this.preOrderTraversal(this.root, nodes);
+
+            // Create a new tree with the updated nodes array
+            const newTree = new Tree(nodes);
+            this.root = newTree.root;
+            // this.balanceTree();
+        }
+        // this.root = this.updateNode(this.root, oldValue, newValue);
     }
 
-    return node;
-}
-
-
- // Function to balance the binary search tree
- balanceTree(): void 
- {
-    this.root = this.balanceTreeRecursive(this.root);
-}
-
-private balanceTreeRecursive(node: BSTNode | null): BSTNode | null {
-
-    if (!node) {
-        return null;
-    }
-
-    // Balance left and right subtrees recursively
-    node.left = this.balanceTreeRecursive(node.left);
-
-    node.right = this.balanceTreeRecursive(node.right);
-
-    // Check if the tree needs balancing
-    if (!this.isBalanced(node)) 
-    {
-        // Tree is unbalanced, perform rotations
-        const leftHeight = this.treeHeight(node.left);
-
-        const rightHeight = this.treeHeight(node.right);
-
-        if (leftHeight > rightHeight) 
-        {
-            // Left heavy, perform right rotation
-            node = this.rotateRight(node);
-        } 
-        else 
-        {
-            // Right heavy, perform left rotation
-            node = this.rotateLeft(node);
+    private preOrderTraversal(node: BSTNode | null, nodes: number[]): void {
+        if (node) {
+            nodes.push(node.data);
+            this.preOrderTraversal(node.left, nodes);
+            this.preOrderTraversal(node.right, nodes);
         }
     }
 
-    return node;
-}
+    private updateNode(node: BSTNode | null, oldValue: number, newValue: number): BSTNode | null {
+        if (!node) {
+            return null; // Node with old value not found
+        }
+
+        if (oldValue < node.data) {
+            node.left = this.updateNode(node.left, oldValue, newValue);
+        } else if (oldValue > node.data) {
+            node.right = this.updateNode(node.right, oldValue, newValue);
+        } else {
+            // If newValue is equal to oldValue no change needed
+            // Node with old value found update its value with the new value
+            if (oldValue !== newValue) {
+                node.data = newValue;
+
+            }
+
+        }
+
+        return node;
+    }
+
+
+    // Function to balance the binary search tree
+    balanceTree(): void {
+        this.root = this.balanceTreeRecursive(this.root);
+    }
+
+    private balanceTreeRecursive(node: BSTNode | null): BSTNode | null {
+
+        if (!node) {
+            return null;
+        }
+
+        // Balance left and right subtrees recursively
+        node.left = this.balanceTreeRecursive(node.left);
+
+        node.right = this.balanceTreeRecursive(node.right);
+
+        // Check if the tree needs balancing
+        if (!this.isBalanced(node)) {
+            // Tree is unbalanced, perform rotations
+            const leftHeight = this.treeHeight(node.left);
+
+            const rightHeight = this.treeHeight(node.right);
+
+            if (leftHeight > rightHeight) {
+                // Left heavy, perform right rotation
+                node = this.rotateRight(node);
+            } else {
+                // Right heavy, perform left rotation
+                node = this.rotateLeft(node);
+            }
+        }
+
+        return node;
+    }
+
 
 // Function to check if a node is balanced
- isBalanced(node: BSTNode | null): boolean {
-    if (!node) {
-        return true;
+    isBalanced(node: BSTNode | null = this.root): boolean {
+        if (!node) {
+            return true;
+        }
+
+        const leftHeight = this.treeHeight(node.left);
+        const rightHeight = this.treeHeight(node.right);
+
+        return Math.abs(leftHeight - rightHeight) <= 1;
     }
 
-    const leftHeight = this.treeHeight(node.left);
-    const rightHeight = this.treeHeight(node.right);
-
-    return Math.abs(leftHeight - rightHeight) <= 1;
-}
-
 // Function to perform a right rotation
-private rotateRight(node: BSTNode): BSTNode {
-    const newRoot = node.left!;
-    node.left = newRoot.right;
-    newRoot.right = node;
-    return newRoot;
-}
+    private rotateRight(node: BSTNode): BSTNode {
+        const newRoot = node.left!;
+        node.left = newRoot.right;
+        newRoot.right = node;
+        return newRoot;
+    }
 
 // Function to perform a left rotation
-private rotateLeft(node: BSTNode): BSTNode {
-    const newRoot = node.right!;
-    node.right = newRoot.left;
-    newRoot.left = node;
-    return newRoot;
-}
+    private rotateLeft(node: BSTNode): BSTNode {
+        const newRoot = node.right!;
+        node.right = newRoot.left;
+        newRoot.left = node;
+        return newRoot;
+    }
 }
 
 
@@ -388,6 +404,6 @@ const tree1 = new Tree([5, 4, 8, 2, 1, 6, 7]);
 // // console.log("Tree after deletions: \n -----------");
 
 
- 
+
 
 // tree1.inOrder(tree.root);
