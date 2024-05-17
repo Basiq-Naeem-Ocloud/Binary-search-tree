@@ -75,37 +75,54 @@ class Tree {
     }
 
 
-    preOrder(node: BSTNode | null = this.root ) {  //preorder traversal
-        if (node === null)
+    inOrder(): void {
+        if (this.root === null) {
             return;
+        }
 
-        console.log(node.data);
-        this.preOrder(node.left);
-        this.preOrder(node.right);
+        const traverse = (node: BSTNode | null): void => {
+            if (node !== null) {
+                traverse(node.left);
+                console.log(node.data);
+                traverse(node.right);
+            }
+        };
 
+        traverse(this.root);
+    }
+    preOrder(): void {
+        if (this.root === null) {
+            return;
+        }
+
+        const traverse = (node: BSTNode | null): void => {
+            if (node !== null) {
+                console.log(node.data);
+                traverse(node.left);
+                traverse(node.right);
+            }
+        };
+
+        traverse(this.root);
+    }
+
+    postOrder(): void {
+        if (this.root === null) {
+            return;
+        }
+
+        const traverse = (node: BSTNode | null): void => {
+            if (node !== null) {
+                traverse(node.left);
+                traverse(node.right);
+                console.log(node.data);
+            }
+        };
+
+        traverse(this.root);
     }
 
 
-    inOrder(node: BSTNode | null = this.root ) {  //inorder traversal
-        if (node === null)
-            return;
-
-        this.inOrder(node.left);
-        console.log(node.data);
-        this.inOrder(node.right);
-
-    }
-
-
-    postOrder(node: BSTNode | null = this.root ) {  //postorder traversal
-        if (node === null)
-            return;
-
-        this.preOrder(node.left);
-        this.preOrder(node.right);
-        console.log(node.data);
-
-    }
 
     //function to find minimum node's value
     findMinimumValue(node: BSTNode | null = this.root): number | null {
